@@ -1,11 +1,11 @@
 # config.py
 
 # Токен бота от @BotFather
-BOT_TOKEN = "YOUR_BOT_TOKEN_HERE"
+BOT_TOKEN = "8221772368:AAGygOdYxXGBNge0CC062OwX2s3B75Zj6oU"
 
 # ID администраторов (узнать у @userinfobot)
 ADMIN_IDS = [
-    123456789,
+    7227348826,
     # 987654321,
 ]
 
@@ -22,4 +22,4 @@ ADMIN_IDS = [
 #  4. Узнайте ID группы (например через @getmyid_bot) — формат: -100xxxxxxxxxx
 #  5. Вставьте ID ниже
 # ─────────────────────────────────────────────────────────────────
-FORUM_GROUP_ID = None  # Например: -1001234567890
+FORUM_GROUP_ID = -1004278974821 # Например: -1001234567890
