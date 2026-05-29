@@ -266,9 +266,7 @@ async def cmd_start(message: Message, state: FSMContext):
 
     await message.answer(
         f"👋 Привет, <b>{message.from_user.first_name}</b>!\n\n"
-        "Это бот поддержки. Напишите ваш вопрос администратору — "
-        "он ответит вам прямо здесь.\n\n"
-        "Поддерживаются: текст, фото, видео, аудио, документы, голосовые, стикеры и кружочки.",
+        "Это бот для связи с администратором. Напишите ваше сообщение здесь и мы ответим вам в ближайшее время",
         reply_markup=user_main_kb()
     )
 
@@ -280,8 +278,7 @@ async def user_write(message: Message, state: FSMContext):
         return
     await state.set_state(UserStates.waiting_message)
     await message.answer(
-        "✏️ Отправьте сообщение администратору.\n"
-        "Поддерживается: текст, фото, видео, аудио, документ, голосовое, кружочек, стикер.",
+        "✏️ Отправьте сообщение администратору.\n",
         reply_markup=cancel_kb()
     )
 
@@ -316,8 +313,7 @@ async def user_send_message(message: Message, state: FSMContext):
         await db.update_ticket_media(ticket_id, file_id, file_type)
 
     await message.answer(
-        f"✅ Обращение <b>#{ticket_id}</b> отправлено!\n"
-        "Администратор ответит вам в ближайшее время.",
+        f"✅ Обращение <b>#{ticket_id}</b> отправлено!\n",
         reply_markup=user_main_kb()
     )
 
@@ -360,19 +356,6 @@ async def user_my_tickets(message: Message):
         preview = (t["message"] or "")[:50]
         lines.append(f"{icon} <b>#{t['id']}</b> ({t['created_at'][:10]}) — {preview}")
     await message.answer("\n".join(lines), reply_markup=user_main_kb())
-
-
-@dp.message(F.text == "ℹ️ О боте")
-async def user_about(message: Message):
-    await message.answer(
-        "🤖 <b>Бот поддержки</b>\n\n"
-        "Здесь вы можете связаться с администратором.\n\n"
-        "<b>Поддерживаемые форматы:</b>\n"
-        "📝 Текст  •  🖼 Фото  •  🎬 Видео\n"
-        "🎵 Аудио  •  🎤 Голосовое  •  📄 Документ\n"
-        "⭕ Кружочек  •  🎭 Стикер  •  🎞 GIF",
-        reply_markup=user_main_kb()
-    )
 
 
 # ════════════════════════════════════════════════════════
@@ -587,7 +570,7 @@ async def cb_reply(callback: CallbackQuery, state: FSMContext):
     await state.set_state(AdminStates.replying)
     await state.update_data(ticket_id=int(ticket_id), user_id=int(user_id))
     await callback.message.answer(
-        f"✏️ Введите ответ для обращения <b>#{ticket_id}</b>:",
+        f"✏️ Введите ответ <b>#{ticket_id}</b>:",
         reply_markup=cancel_kb()
     )
     await callback.answer()
@@ -607,7 +590,7 @@ async def admin_do_reply(message: Message, state: FSMContext):
     await db.set_ticket_reply(ticket_id, reply_text)
 
     try:
-        prefix = f"📬 <b>Ответ на ваше обращение #{ticket_id}</b>\n<i>— Администратор</i>\n\n"
+        prefix = f"📬 <b>Ответ на ваше сообщение #{ticket_id}</b>\n<i>— Администратор</i>\n\n"
         await forward_to_user(message, user_id, prefix)
         confirm = "✅ Ответ отправлен!"
     except Exception as e:
